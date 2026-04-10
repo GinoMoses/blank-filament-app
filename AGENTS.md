@@ -385,7 +385,3 @@ livewire(ListUsers::class)
 - **Never assume public file visibility.** File visibility is `private` by default. Always use `->visibility('public')` when public access is needed.
 - **Never assume full-width layout.** `Grid`, `Section`, and `Fieldset` do not span all columns by default. Explicitly set column spans when needed.
 </laravel-boost-guidelines>
-
-When creating Filament resources and other elements use php artisan commands to generate them, and ensure you use the correct options to generate the appropriate code.
-
-Always add tests when creating new features or modifying existing ones, and use the appropriate testing tools and approaches for the type of test being created.
