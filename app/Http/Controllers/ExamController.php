@@ -8,6 +8,9 @@ use App\Models\StudentExamAttempt;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class ExamController extends Controller
@@ -21,7 +24,7 @@ class ExamController extends Controller
                 'title' => $exam->title,
                 'description' => $exam->description,
                 'question_count' => $exam->questions->count(),
-                'attempt' => auth()->user()?->examAttempts()
+                'attempt' => Auth::user()?->examAttempts()
                     ->where('exam_test_id', $exam->id)
                     ->latest()
                     ->first(),
@@ -32,7 +35,7 @@ class ExamController extends Controller
 
     public function show(ExamTest $examTest): View
     {
-        $user = auth()->user();
+        $user = Auth::user();
 
         // Check if student already has a draft attempt
         $attempt = $user->examAttempts()
@@ -63,7 +66,7 @@ class ExamController extends Controller
             ->get()
             ->map(fn ($question) => [
                 'id' => $question->id,
-                'text' => $question->text,
+                'text' => $question->question,
                 'explanation' => $question->explanation,
                 'difficulty' => is_string($question->difficulty) ? $question->difficulty : $question->difficulty->value,
                 'category' => $question->category->name,
@@ -85,14 +88,14 @@ class ExamController extends Controller
         ]);
     }
 
-    public function submitAnswer(Request $request, ExamTest $examTest)
+    public function submitAnswer(Request $request, ExamTest $examTest): Response
     {
         $request->validate([
-            'question_id' => 'required|exists:questions,id',
-            'answer_id' => 'nullable|exists:question_answers,id',
+            'question_id' => ['required', 'integer', Rule::exists('questions', 'id')],
+            'answer_id' => ['nullable', 'integer', Rule::exists('question_answers', 'id')],
         ]);
 
-        $user = auth()->user();
+        $user = Auth::user();
         $attempt = $user->examAttempts()
             ->where('exam_test_id', $examTest->id)
             ->where('status', 'draft')
@@ -102,28 +105,38 @@ class ExamController extends Controller
             abort(404);
         }
 
+        $question = $examTest->questions()
+            ->findOrFail($request->integer('question_id'));
+
+        $selectedAnswerId = $request->filled('answer_id')
+            ? $request->integer('answer_id')
+            : null;
+
+        if ($selectedAnswerId !== null && ! $question->answers()->whereKey($selectedAnswerId)->exists()) {
+            abort(422, 'Selected answer does not belong to this question.');
+        }
+
         $studentAnswer = $attempt->answers()
-            ->where('question_id', $request->question_id)
+            ->where('question_id', $question->id)
             ->first();
 
         if ($studentAnswer) {
-            // Update selected answer and correctness
-            $correctAnswer = $examTest->questions()
-                ->find($request->question_id)
-                ->answers()
+            $correctAnswerId = $question->answers()
                 ->where('is_correct', true)
-                ->first();
+                ->value('id');
 
             $studentAnswer->update([
-                'selected_answer_id' => $request->answer_id,
-                'is_correct' => $request->answer_id === $correctAnswer?->id,
+                'selected_answer_id' => $selectedAnswerId,
+                'is_correct' => $selectedAnswerId !== null && $selectedAnswerId === (int) $correctAnswerId,
             ]);
         }
+
+        return response()->noContent();
     }
 
     public function submit(Request $request, ExamTest $examTest): RedirectResponse
     {
-        $user = auth()->user();
+        $user = Auth::user();
         $attempt = $user->examAttempts()
             ->where('exam_test_id', $examTest->id)
             ->where('status', 'draft')
@@ -143,7 +156,7 @@ class ExamController extends Controller
     public function results(ExamTest $examTest, StudentExamAttempt $attempt): View
     {
         // Verify user owns this attempt
-        if ($attempt->user_id !== auth()->id()) {
+        if ($attempt->user_id !== Auth::id()) {
             abort(403);
         }
 
@@ -152,7 +165,7 @@ class ExamController extends Controller
             ->get()
             ->map(fn ($question) => [
                 'id' => $question->id,
-                'text' => $question->text,
+                'text' => $question->question,
                 'explanation' => $question->explanation,
                 'difficulty' => is_string($question->difficulty) ? $question->difficulty : $question->difficulty->value,
                 'category' => $question->category->name,
