@@ -16,7 +16,7 @@ A Laravel-based exam question bank system with Filament admin panel for teachers
 
 ```bash
 git clone https://github.com/GinoMoses/blank-filament-app.git
-cd bank-pytan-egzaminacyjnych
+cd blank-filament-app
 composer install
 npm install
 cp .env.example .env
