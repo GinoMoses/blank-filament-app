@@ -5,6 +5,7 @@ namespace App\Filament\Resources\ExamTests;
 use App\Filament\Resources\ExamTests\Pages\CreateExamTest;
 use App\Filament\Resources\ExamTests\Pages\EditExamTest;
 use App\Filament\Resources\ExamTests\Pages\ListExamTests;
+use App\Filament\Resources\ExamTests\Pages\ViewExamTest;
 use App\Filament\Resources\ExamTests\Schemas\ExamTestForm;
 use App\Filament\Resources\ExamTests\Tables\ExamTestsTable;
 use App\Models\ExamTest;
@@ -42,6 +43,7 @@ class ExamTestResource extends Resource
         return [
             'index' => ListExamTests::route('/'),
             'create' => CreateExamTest::route('/create'),
+            'view' => ViewExamTest::route('/{record}'),
             'edit' => EditExamTest::route('/{record}/edit'),
         ];
     }

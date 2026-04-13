@@ -13,6 +13,15 @@ class Question extends Model
 {
     use HasFactory;
 
+    protected static function booted(): void
+    {
+        static::creating(function (Question $question) {
+            if (empty($question->created_by)) {
+                $question->created_by = auth()->id() ?? 1;
+            }
+        });
+    }
+
     protected $fillable = [
         'question_category_id',
         'question',

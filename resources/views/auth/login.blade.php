@@ -99,18 +99,33 @@
                     </button>
                 </form>
 
-                <div class="mt-6 rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-slate-800">
-                    <p class="text-sm font-semibold text-cyan-900">Dane testowe</p>
-                    <div class="mt-3 grid gap-2 text-sm">
-                        <div class="flex items-center justify-between gap-4 rounded-xl bg-white px-3 py-2 shadow-sm">
-                            <span class="text-slate-500">Email</span>
-                            <code class="font-semibold text-slate-900">student@test.com</code>
+                <div class="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-slate-800">
+                    <p class="text-sm font-semibold text-amber-900">Konta testowe (demo)</p>
+                    <div class="mt-3 grid gap-3 text-sm">
+                        <div class="rounded-xl bg-white px-3 py-2 shadow-sm">
+                            <p class="text-xs font-semibold text-cyan-700">Admin / Nauczyciel</p>
+                            <div class="mt-1 flex items-center justify-between gap-4">
+                                <span class="text-slate-500">Email</span>
+                                <code class="font-semibold text-slate-900">admin@example.com</code>
+                            </div>
+                            <div class="flex items-center justify-between gap-4">
+                                <span class="text-slate-500">Hasło</span>
+                                <code class="font-semibold text-slate-900">password</code>
+                            </div>
                         </div>
-                        <div class="flex items-center justify-between gap-4 rounded-xl bg-white px-3 py-2 shadow-sm">
-                            <span class="text-slate-500">Hasło</span>
-                            <code class="font-semibold text-slate-900">password</code>
+                        <div class="rounded-xl bg-white px-3 py-2 shadow-sm">
+                            <p class="text-xs font-semibold text-cyan-700">Student</p>
+                            <div class="mt-1 flex items-center justify-between gap-4">
+                                <span class="text-slate-500">Email</span>
+                                <code class="font-semibold text-slate-900">student@example.com</code>
+                            </div>
+                            <div class="flex items-center justify-between gap-4">
+                                <span class="text-slate-500">Hasło</span>
+                                <code class="font-semibold text-slate-900">password</code>
+                            </div>
                         </div>
                     </div>
+                    <p class="mt-3 text-xs text-slate-500">Konta tworzone automatycznie przy pierwszym uruchomieniu</p>
                 </div>
             </section>
         </div>

@@ -41,6 +41,7 @@ return [
             'journal_mode' => null,
             'synchronous' => null,
             'transaction_mode' => 'DEFERRED',
+            'charset' => 'utf8mb4',
         ],
 
         'mysql' => [

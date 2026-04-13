@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ExamTest;
 use App\Models\StudentAnswer;
 use App\Models\StudentExamAttempt;
+use App\Services\ExamPdfExportService;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -188,5 +189,19 @@ class ExamController extends Controller
             'attempt' => $attempt,
             'questions' => $questions,
         ]);
+    }
+
+    public function downloadPdf(ExamTest $examTest)
+    {
+        $pdfService = app(ExamPdfExportService::class);
+
+        return $pdfService->generateExamPdf($examTest, includeAnswers: false);
+    }
+
+    public function downloadPdfWithAnswers(ExamTest $examTest)
+    {
+        $pdfService = app(ExamPdfExportService::class);
+
+        return $pdfService->generateAnswerKeyPdf($examTest);
     }
 }

@@ -16,4 +16,7 @@ Route::middleware('auth')->group(function (): void {
     Route::post('/exams/{examTest}/submit-answer', [ExamController::class, 'submitAnswer'])->name('exams.submit-answer');
     Route::post('/exams/{examTest}/submit', [ExamController::class, 'submit'])->name('exams.submit');
     Route::get('/exams/{examTest}/attempts/{attempt}/results', [ExamController::class, 'results'])->name('exams.results');
+
+    Route::get('/admin/exam-tests/{examTest}/pdf', [ExamController::class, 'downloadPdf'])->name('admin.exam-tests.pdf');
+    Route::get('/admin/exam-tests/{examTest}/pdf-with-answers', [ExamController::class, 'downloadPdfWithAnswers'])->name('admin.exam-tests.pdf-with-answers');
 });

@@ -1,7 +1,11 @@
 <?php
 
-test('the application returns a successful response', function () {
-    $response = $this->get('/');
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 
-    $response->assertStatus(200);
+uses(LazilyRefreshDatabase::class);
+
+it('shows login page', function () {
+    $response = $this->get('/login');
+
+    $response->assertSuccessful();
 });

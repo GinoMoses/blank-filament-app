@@ -21,6 +21,10 @@ class ExamTestFactory extends Factory
             'title' => $this->faker->words(4, true),
             'description' => $this->faker->paragraph(),
             'number_of_questions' => $this->faker->numberBetween(5, 30),
+            'generation_type' => $this->faker->randomElement(['manual', 'random']),
+            'category_ids' => null,
+            'difficulty_levels' => null,
+            'is_auto_generated' => $this->faker->boolean(),
             'created_by' => User::factory(),
             'generated_at' => $this->faker->dateTimeBetween('-1 month'),
         ];
